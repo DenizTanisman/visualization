@@ -1,0 +1,58 @@
+"""
+Seaborn ile Veri Görselleştirme Özeti
+
+Bu rehber, Python’da Seaborn kütüphanesi ile veri görselleştirmeye giriş niteliğindedir. Grafik türleri, kullanım örnekleri, yorumlamalar ve stil özelleştirmeleri dahil olmak üzere temel her şeyi içerir.
+"""
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+pd.plotting.register_matplotlib_converters()
+print("Setup Complete")
+
+# CSV dosyasını yüklemek için:
+filepath = "dosya_yolu.csv"
+data = pd.read_csv(filepath, index_col="TarihSutunu", parse_dates=True)
+
+# İlk satırları görmek için:
+data.head()
+
+"""
+Grafik Türleri ve Kullanımları
+"""
+# 1. Çizgi Grafiği (Line Plot)
+sns.lineplot(data=data)                              # Zamansal verilerde trendleri gösterir.
+sns.lineplot(data=data['KolonAdi'], label="Etiket")  # Belirli sütunları göstermek için:
+
+# 2. Çubuk Grafiği (Bar Plot)
+sns.barplot(x=data.index, y=data['NK'])              # Gruplar arası karşılaştırma
+
+# 3. Isı Haritası (Heatmap)
+sns.heatmap(data=data, annot=True)                   # Tabloların desenlerini renk ile görselleştirir
+
+# 4. Dağılım Grafiği (Scatter Plot)
+sns.scatterplot(x=data['bmi'], y=data['charges'])    # İki sürekli değişken arasındaki ilişki:
+sns.scatterplot(x='bmi', y='charges', hue='smoker', data=data) # Üçüncü bir değişken için renk kodlaması:
+
+# 5. Regresyon Grafiği (Regplot & Lmplot)
+sns.regplot(x='bmi', y='charges', data=data)
+sns.lmplot(x="bmi", y="charges", hue="smoker", data=data)
+
+# 6. Swarmplot (Kategorik Dağılım)
+sns.swarmplot(x="smoker", y="charges", data=data, size=4)
+
+# 7. Histogram (Histplot)
+sns.histplot(data=data, x='Petal Length (cm)', hue='Species')
+
+# 8. KDE (Yoğunluk Eğrisi)
+sns.kdeplot(data=data, x='Petal Length (cm)', hue='Species', fill=True)
+
+"""
+Uygulama Senaryoları
+	•	Uçuş gecikmeleri: Aylara göre havayollarının ortalama varış gecikmeleri.
+	•	Spotify akışları: 2017–2018 şarkıların günlük dinlenme sayıları.
+	•	FIFA sıralamaları: Zaman içinde ülkelerin sıralamaları.
+	•	İris çiçekleri: Türler arası ölçüm dağılımları.
+	•	Sigorta ücretleri: Sigara kullanımı, BMI ve ödemeler arasındaki ilişki.
+"""
